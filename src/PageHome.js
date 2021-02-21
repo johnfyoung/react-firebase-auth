@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
+import withHelmet from "./withHelmet";
 import Login from "./Login";
 
 import { UserContext } from "./UserProvider";
@@ -39,4 +40,4 @@ export function PageHome() {
   );
 }
 
-export default PageHome;
+export default withHelmet(PageHome, "Login");

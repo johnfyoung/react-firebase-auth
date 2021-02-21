@@ -9,7 +9,7 @@ import Header from "./Header";
 import PageHome from "./PageHome";
 import PageSignup from "./PageSignup";
 import PageAbout from "./PageAbout";
-import PageSecret from "./PageSecret";
+import PageAdmin from "./PageAdmin";
 import PageNotFound from "./PageNotFound";
 
 function Routes() {
@@ -21,9 +21,6 @@ function Routes() {
     <>
       {typeof user !== "undefined" ? (
         <>
-          <Helmet>
-            <title>React Firebase Auth</title>
-          </Helmet>
           <Header />
           <Switch>
             <Route exact path="/">
@@ -35,7 +32,7 @@ function Routes() {
             <Route exact path="/about">
               <PageAbout />
             </Route>
-            <ProtectedRoute exact path="/admin" component={PageSecret} />
+            <ProtectedRoute exact path="/admin" component={PageAdmin} />
             <Route>
               <PageNotFound />
             </Route>

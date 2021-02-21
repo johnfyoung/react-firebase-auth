@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 
+import withHelmet from "./withHelmet";
+
 import { UserContext } from "./UserProvider";
 import SignupForm from "./SignupForm";
 
 export function PageSignup() {
   const { user, isSigningUp } = useContext(UserContext);
+
   return (
     <Container>
       <Row>
@@ -23,4 +26,4 @@ export function PageSignup() {
   );
 }
 
-export default PageSignup;
+export default withHelmet(PageSignup, "Sign Up");

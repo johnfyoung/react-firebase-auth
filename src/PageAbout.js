@@ -1,4 +1,5 @@
 import { Container, Row, Col } from "react-bootstrap";
+import withHelmet from "./withHelmet";
 
 function PageAbout() {
   return (
@@ -26,4 +27,4 @@ function PageAbout() {
   );
 }
 
-export default PageAbout;
+export default withHelmet(PageAbout, "About");

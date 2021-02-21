@@ -1,7 +1,7 @@
-import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import withHelmet from "./withHelmet";
 
-function PageSecret() {
+function PageAdmin() {
   return (
     <Container>
       <Row>
@@ -19,4 +19,4 @@ function PageSecret() {
   );
 }
 
-export default PageSecret;
+export default withHelmet(PageAdmin, "Admin");

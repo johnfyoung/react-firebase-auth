@@ -1,5 +1,5 @@
-import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import withHelmet from "./withHelmet";
 
 export function PageNotFound() {
   return (
@@ -11,4 +11,4 @@ export function PageNotFound() {
   );
 }
 
-export default PageNotFound;
+export default withHelmet(PageNotFound, "Page Not Found");
