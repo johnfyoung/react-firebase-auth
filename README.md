@@ -1,76 +1,74 @@
 # react-firebase-auth
 
-An example of using firebase authentication with firestore and protected routes
+An example of using react with firebase authentication with firestore.
 
----
+This app was bootstrpped with `create-react-app` and uses the `react-bootstap` component library.
 
-# Getting Started with Create React App
+## Background
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+I had some students trying to connect `firebase` auth with user profiles stored in `firestore` and I was having a hard time keeping it all straight in their code. So I felt a need to build a sample app of my own to discover the quirks of using this set up with react.
 
-## Available Scripts
+There is [this tutorial](https://blog.logrocket.com/user-authentication-firebase-react-apps/) that does a pretty good job of setting it up. But I had some thoughts about how to protect the API keys and about accessing the firestore post-sign in and post-sign up.
 
-In the project directory, you can run:
+## Storing and protecting firebase keys
 
-### `npm start`
+**TL;DR** - create a key for production that should whitelist to your production domain and create another key with no restrictions (or maybe the IP address of your dev machine) for local development that should never leave your machine.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Any key used by a web client is fully exposed to the world, so the key used for production needs to be limited for use by your deployment domain only. It is also best practice to keep API keys out of the git repository.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+How does one do this?
 
-### `npm test`
+1. [Create a Firebase project](https://console.firebase.google.com/). A project can have many apps, the assumption being that you might have a web, ios and android applications that use the same firebase backend.
+2. Add a Web Application to this project
+3. On the result screen, copy the `firebaseConfig` object from the code snippet and paste it into a file called `firebaseConfig.json` in your React application's `src` directory.
+4. Edit the `js` in your `json` file to make sure it is properly formed `json`:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```json
+{
+  "apiKey": "your key here",
+  "authDomain": "Your auth domain here",
+  "projectId": "your project id here",
+  "storageBucket": "your storage bucket",
+  "messagingSenderId": "your messaging sender id",
+  "appId": "your app id",
+  "measurementId": "your measurement id"
+}
+```
 
-### `npm run build`
+5. Add `firebaseConfig.json` to your `.gitignore`. This ensures that this file will only be used locally.
+6. Add a `.env` file (make sure it is also added to the `.gitignore`). The `.env` should have this key
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+REACT_APP_FIREBASE_CONFIG="./firebaseConfig.json"
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+7. The `src/firebase.js` file in this project will open that file into a variable which allows this app to connect to firebase from a locally hosted app.
+8. Go to [your google cloud credentials screen](https://console.cloud.google.com/apis/credentials). Make sure you choose your firebase project from the drop down.
+9. Under "API Keys", you should see a key labelled "Browser key (auto created by Firebase). Click the edit pencil and name this key "Dev". Click save.
+10. Back on the Credentials screen, click the "CREATE CREDENTIALS" button at the top of the screen. Select API Key.
+11. In the result window, click "Restrict Key"
+12. Name this one "Production"
+13. Select "HTTP referrers" from the Application Restrictions
+14. in "Website Restrictions", select add an item
+15. Provide the domain for your application e.g.:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+myapp.herokuapp.com/*
+```
 
-### `npm run eject`
+16. Click "DONE"
+17. Under "API RESTRICTIONS" at the bottom of the screen, click "Restrict Key"
+18. In the "Select APIs", dropdown check the "Identity Toolkit API" and the "Cloud Storage API"
+19. Click "Save"
+20. On the admin panel at your production host (e.g., heroku), add two environment variables:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+REACT_APP_FIREBASE_CONFIG=./firebaseConfig.json
+FIREBASE_CONFIG=[the contents of your firebaseConfig.json but with the production API key]
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+21. Upon deployment, before the React app is built, a `firebaseConfig.json` file will be created in the `src` directory using the configuration in `FIREBASE_CONFIG`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Access the profile post log in/sign in
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The Firebase auth library has an `onAuthStateChanged` event that happens when a user signs in or out. This would be the best time to load the corresponding `firestore` entry for a user. I discovered that Firebase signs you in after sign up. This triggers an `auth.onAuthStateChanged` event before the firestore record is even created. To remedy this, in the `UserProvider` I have a one `useEffect` to handle the `onAuthStateChanged` event which sets the user state. I have another `useEffect` watching the user state and an `isSigningUp` variable. The profile will only be fetched if `isSigningUp` is false.
