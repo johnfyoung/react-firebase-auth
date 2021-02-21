@@ -2,10 +2,13 @@ import { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UserContext } from "./UserProvider";
 
+import ProtectedRoute from "./ProtectedRoute";
+
 import Header from "./Header";
 import PageHome from "./PageHome";
 import PageSignup from "./PageSignup";
 import PageAbout from "./PageAbout";
+import PageSecret from "./PageSecret";
 import PageNotFound from "./PageNotFound";
 
 function Routes() {
@@ -30,6 +33,7 @@ function Routes() {
             <Route exact path="/about">
               <PageAbout />
             </Route>
+            <ProtectedRoute exact path="/admin" component={PageSecret} />
             <Route>
               <PageNotFound />
             </Route>

@@ -28,6 +28,11 @@ export function Header() {
                 Sign up
               </Nav.Link>
             )}
+            {user && (
+              <Nav.Link as={Link} to="/admin">
+                Admin
+              </Nav.Link>
+            )}
           </Nav>
           <UserStatus />
         </Navbar.Collapse>
