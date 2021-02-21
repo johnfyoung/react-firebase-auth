@@ -1,6 +1,7 @@
-import { useContext, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { useContext } from "react";
+import { BrowserRouter as Route, Switch } from "react-router-dom";
 import { UserContext } from "./UserProvider";
+import { Helmet } from "react-helmet";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -13,15 +14,16 @@ import PageNotFound from "./PageNotFound";
 
 function Routes() {
   const { user } = useContext(UserContext);
+
   console.log("---------------- ROUTES: ", user);
 
-  // useEffect(() => {
-  //   console.log("USER: ", user);
-  // }, [user]);
   return (
     <>
       {typeof user !== "undefined" ? (
-        <Router>
+        <>
+          <Helmet>
+            <title>React Firebase Auth</title>
+          </Helmet>
           <Header />
           <Switch>
             <Route exact path="/">
@@ -38,7 +40,7 @@ function Routes() {
               <PageNotFound />
             </Route>
           </Switch>
-        </Router>
+        </>
       ) : (
         <pre>{JSON.stringify(user, null, 2)}</pre>
       )}
