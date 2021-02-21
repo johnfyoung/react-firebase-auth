@@ -1,1 +1,0 @@
-echo ${FIREBASE_CONFIG} > /app/src/firebaseConfig.json
